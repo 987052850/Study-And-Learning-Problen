@@ -8,8 +8,9 @@ public class GPUInstancing : MonoBehaviour
     public int _instanceCount;
     public float _radius;
     public bool _randomCol = false;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         Transform parent = new GameObject("Dynamic Gameobject").transform;
         MaterialPropertyBlock block = new MaterialPropertyBlock();
@@ -25,7 +26,7 @@ public class GPUInstancing : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }

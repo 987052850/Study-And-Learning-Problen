@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterfaceConfig>
+    <!-- Interface Section -->
+    <Interface>
+      <!-- Type : 0->canvas  -->
+      <Type>0</Type>
+      <Name>Canvas000</Name>
+      <Layout>0</Layout>
+      <Image path="Image/MainScene/mei001" />
+    </Interface>
+
+    <!-- Background Section -->
+    <Background>
+       <Image path="images/background.jpg" />
+    </Background>
+
+    <!-- Button Array Section -->
+    <ButtonArray>
+        <Button>
+          <Name>复刻星穷铁道</Name>
+          <Image path="images/button1.png" />
+          <Anchor x = "0.5" y ="0.5"/>
+          <Layout>0</Layout>
+          <Position x="0" y="100" />
+          <Size width="300" height="150" />
+          <Event name="LoadScene" parameter="Fork" />
+        </Button>
+        <Button>
+          <Name>个人练习</Name>
+          <Image path="images/button2.png" />
+          <Anchor x = "0.5" y ="0.5"/>
+          <Layout>0</Layout>
+          <Position x="0" y="-100" />
+          <Size width="300" height="150" />
+          <Event name="OnClick" parameter="PlayGame" />
+        </Button>
+    </ButtonArray>
+</InterfaceConfig>
