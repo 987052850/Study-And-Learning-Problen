@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterfaceConfig>
+  <!-- Interface Section -->
+  <Interface>
+    <!-- Type : 0->canvas  -->
+    <Type>0</Type>
+    <Name>Canvas000</Name>
+    <Layout>1</Layout>
+    <Image path="Image/MainScene/robin002" />
+  </Interface>
+
+  <!-- Background Section -->
+  <Background>
+    <Image path="images/background.jpg" />
+  </Background>
+
+  <!-- Button Array Section -->
+  <ButtonArray>
+    <Button>
+      <Name>PracticeBack</Name>
+      <Type>1</Type>
+      <Image path="images/button1.png" />
+      <Anchor x = "0" y ="1"/>
+      <Layout>0</Layout>
+      <Position x="150" y="-75" />
+      <Size width="300" height="150" />
+      <Event name="Back" parameter="" />
+    </Button>
+  </ButtonArray>
+
+  <!-- Button Array Section -->
+  <ScrollView>
+    <Name>InfiniteScrolling</Name>
+    <Type>3</Type>
+    <ChildType>1</ChildType>
+    <Image path="images/button1.png" />
+    <Anchor x = "0.5" y ="0.5"/>
+    <Layout>0</Layout>
+    <Position x="0" y="0" />
+    <Size width="300" height="1080" />
+    <State Horizontal="false" Vertical="true" />
+    <ContentData width="300" height="100" />
+    <Content>
+      <Name>圆角图片</Name>
+      <Type>1</Type>
+      <Image path="images/button1.png" />
+      <Anchor x = "0" y ="1"/>
+      <Layout>0</Layout>
+      <Position x="150" y="-75" />
+      <Size width="300" height="100" />
+      <Event name="LoadScene" parameter="RoundedCorner" />
+    </Content>
+    <Content>
+      <Name>GPUInstancing</Name>
+      <Type>1</Type>
+      <Image path="images/button1.png" />
+      <Anchor x = "0.5" y ="1"/>
+      <Layout>0</Layout>
+      <Position x="0" y="0" />
+      <Size width="300" height="100" />
+      <Event name="LoadScene" parameter="GPUInstancing" />
+    </Content>
+    <Content>
+      <Name>TransparentFollowMouse</Name>
+      <Type>1</Type>
+      <Image path="images/button1.png" />
+      <Anchor x = "0.5" y ="1"/>
+      <Layout>0</Layout>
+      <Position x="0" y="0" />
+      <Size width="300" height="100" />
+      <Event name="LoadScene" parameter="TransparentFollowMouse" />
+    </Content>
+  </ScrollView>
+</InterfaceConfig>

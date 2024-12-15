@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterfaceConfig>
+  <!-- Interface Section -->
+  <Interface>
+    <!-- Type : 0->canvas  -->
+    <Type>0</Type>
+    <Name>Canvas000</Name>
+    <Layout>1</Layout>
+    <Image path="" />
+  </Interface>
+
+  <!-- Background Section -->
+  <Background>
+    <Image path="images/background.jpg" />
+  </Background>
+
+  <!-- Button Array Section -->
+  <ButtonArray>
+    <Button>
+      <Name>GPUInstancingBack</Name>
+      <Type>1</Type>
+      <Image path="images/button1.png" />
+      <Anchor x = "0" y ="1"/>
+      <Layout>0</Layout>
+      <Position x="150" y="-75" />
+      <Size width="300" height="150" />
+      <Event name="Back" parameter="" />
+    </Button>
+  </ButtonArray>
+
+  <SliderArray>
+    <Slider>
+      <Name>Slider</Name>
+      <Type>4</Type>
+      <Anchor x = "0.5" y ="0"/>
+      <Position x="0" y="75" />
+      <Size width="300" height="20" />
+      <Map type ="0" name="Cube" attribute ="_Lerp" min="0" max="1" />
+    </Slider>
+  </SliderArray>
+
+  <StateWindow>
+    <!-- unit : milliseconds -->
+    <DeltaTime>1000</DeltaTime>
+    <Image>
+      <Name>StateWindow</Name>
+      <Type>4</Type>
+      <Image path="" />
+      <Anchor x = "1" y ="1"/>
+      <Position x="-150" y="-75" />
+      <Size width="300" height="150" />
+      <Color r ="0" g="0" b ="0" a="0.2" />
+    </Image>
+    <TextMeshProArray>
+      <TextMeshPro>
+        <Name>FrameRate</Name>
+        <Type>5</Type>
+        <Anchor x = "0.5" y ="1"/>
+        <Position x="0" y="-35" />
+        <Size width="250" height="25" />
+        <Color r ="1" g="1" b ="1" a="1" />
+        <Font aotoSize ="true" minSize="10" maxSize ="50"/>
+        <Text>FrameRate</Text>
+      </TextMeshPro>
+      <TextMeshPro>
+        <Name>DrallCall</Name>
+        <Type>5</Type>
+        <Anchor x = "0.5" y ="1"/>
+        <Position x="0" y="-65" />
+        <Size width="250" height="25" />
+        <Color r ="1" g="1" b ="1" a="1" />
+        <Font aotoSize ="true" minSize="10" maxSize ="50"/>
+        <Text>DrallCall</Text>
+      </TextMeshPro>
+      <TextMeshPro>
+        <Name>TotalVertices</Name>
+        <Type>5</Type>
+        <Anchor x = "0.5" y ="1"/>
+        <Position x="0" y="-95" />
+        <Size width="250" height="25" />
+        <Font aotoSize ="true" minSize="10" maxSize ="50"/>
+        <Color r ="1" g="1" b ="1" a="1" />
+        <Text>TotalVertices</Text>
+      </TextMeshPro>
+      <TextMeshPro>
+        <Name>TotalTriangles</Name>
+        <Type>5</Type>
+        <Anchor x = "0.5" y ="1"/>
+        <Position x="0" y="-125" />
+        <Size width="250" height="25" />
+        <Font aotoSize ="true" minSize="10" maxSize ="50"/>
+        <Color r ="1" g="1" b ="1" a="1" />
+        <Text>TotalTriangles</Text>
+      </TextMeshPro>
+    </TextMeshProArray>
+  </StateWindow>
+</InterfaceConfig>

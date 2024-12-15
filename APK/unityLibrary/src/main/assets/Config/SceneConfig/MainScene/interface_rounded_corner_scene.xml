@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterfaceConfig>
+    <!-- Interface Section -->
+    <Interface>
+      <!-- Type : 0->canvas  -->
+      <Type>0</Type>
+      <Name>Canvas000</Name>
+      <Layout>1</Layout>
+      <Image path="" />
+    </Interface>
+
+    <!-- Background Section -->
+    <Background>
+       <Image path="images/background.jpg" />
+    </Background>
+
+    <!-- Button Array Section -->
+    <ButtonArray>
+        <Button>
+          <Name>RoundedCornerBack</Name>
+          <Type>1</Type>
+          <Image path="images/button1.png" />
+          <Anchor x = "0" y ="1"/>
+          <Layout>0</Layout>
+          <Position x="150" y="-75" />
+          <Size width="300" height="150" />
+          <Event name="Back" parameter="" />
+        </Button>
+    </ButtonArray>
+  
+    <SliderArray>
+      <Slider>
+        <Name>Slider</Name>
+        <Type>4</Type>
+        <Anchor x = "0.5" y ="0"/>
+        <Position x="0" y="75" />
+        <Size width="300" height="20" />
+        <Map type ="1" name="Canvas/Image" attribute ="_R" min="0" max="0.5" />
+      </Slider>
+    </SliderArray>
+
+
+</InterfaceConfig>
