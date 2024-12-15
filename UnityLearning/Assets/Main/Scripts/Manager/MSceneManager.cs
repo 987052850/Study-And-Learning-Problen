@@ -33,7 +33,7 @@ namespace TEN.MANAGER
             Instance = this;
             DontDestroyOnLoad(this);
             _sceneStack = new Stack<EScene>();
-            //添加新场景修改内容 2/4
+            //添加新场景修改内容 3/4
             _nameMapEnum = new Dictionary<string, EScene>()
             {
                 { "Fork" , EScene.FORK_SCENE},
@@ -41,6 +41,7 @@ namespace TEN.MANAGER
                 { "MainScene" , EScene.MAIN_SCENE},
                 { "RoundedCorner" , EScene.ROUNDED_CORNER},
                 { "GPUInstancing" , EScene.GPU_INSTANCING},
+                { "TransparentFollowMouse" , EScene.TRANSPARENT_FOLLOW_MOUSE},
             };
         
             _sceneMapToPath = new Dictionary<EScene, string>()
@@ -50,6 +51,7 @@ namespace TEN.MANAGER
                 { EScene.PRACTICE_SCENE , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.SelfPracticeSceneConfig},
                 { EScene.ROUNDED_CORNER , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.RoundedCornerSceneConfig},
                 { EScene.GPU_INSTANCING , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.GPUInstancingSceneConfig},
+                { EScene.TRANSPARENT_FOLLOW_MOUSE , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.TransparentFollowMouseSceneConfig},
             };
             //Scene[] scenes = SceneManager.GetAllScenes();
             //_allScenesName = new string[scenes.Length];

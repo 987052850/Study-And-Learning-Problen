@@ -55,6 +55,7 @@ Shader "Learning/HW/UI/RoundedCorner"
 				//return outCol;
 				//获取maintex对应uv坐标的颜色	
 				fixed4 outCol = tex2D(_MainTex , i.uv);
+				float aspectRatio = (_ScreenParams.x / _ScreenParams.y) ;
 				//只要x或者y有一个值落在阙值的范围之内，即将alpha设置为1
 				//所以，需要比较转换到第一现象的uv坐标与阙值的关系
 				//如果大于阙值则为1，即需要将其进行透明处理

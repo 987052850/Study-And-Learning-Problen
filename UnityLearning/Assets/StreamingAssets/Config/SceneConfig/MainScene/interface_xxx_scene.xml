@@ -5,7 +5,7 @@
       <!-- Type : 0->canvas  -->
       <Type>0</Type>
       <Name>Canvas000</Name>
-      <Layout>0</Layout>
+      <Layout>1</Layout>
       <Image path="" />
     </Interface>
 

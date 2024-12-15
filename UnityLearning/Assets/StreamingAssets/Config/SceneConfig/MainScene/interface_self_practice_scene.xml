@@ -60,5 +60,15 @@
       <Size width="300" height="100" />
       <Event name="LoadScene" parameter="GPUInstancing" />
     </Content>
+    <Content>
+      <Name>TransparentFollowMouse</Name>
+      <Type>1</Type>
+      <Image path="images/button1.png" />
+      <Anchor x = "0.5" y ="1"/>
+      <Layout>0</Layout>
+      <Position x="0" y="0" />
+      <Size width="300" height="100" />
+      <Event name="LoadScene" parameter="TransparentFollowMouse" />
+    </Content>
   </ScrollView>
 </InterfaceConfig>

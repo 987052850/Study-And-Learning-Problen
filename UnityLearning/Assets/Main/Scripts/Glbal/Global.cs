@@ -7,7 +7,7 @@ namespace TEN.GLOBAL
 {
     public static class Path
     {
-        //添加新场景修改内容 3/4
+        //添加新场景修改内容 2/4
         public static class XMLCongigPath
         {
             public const string MainSceneConfig = @"\Config\SceneConfig\MainScene\interface_main_scene.xml";
@@ -15,6 +15,7 @@ namespace TEN.GLOBAL
             public const string SelfPracticeSceneConfig = @"\Config\SceneConfig\MainScene\interface_self_practice_scene.xml";
             public const string RoundedCornerSceneConfig = @"\Config\SceneConfig\MainScene\interface_rounded_corner_scene.xml";
             public const string GPUInstancingSceneConfig = @"\Config\SceneConfig\MainScene\interface_GPU_instancing_scene.xml";
+            public const string TransparentFollowMouseSceneConfig = @"\Config\SceneConfig\MainScene\interface_Transparent_Follow_Mouse_scene.xml";
         }
     }
     public static class Global
@@ -232,6 +233,7 @@ namespace TEN.GLOBAL
             PRACTICE_SCENE = 2,
             ROUNDED_CORNER = 3,
             GPU_INSTANCING = 4,
+            TRANSPARENT_FOLLOW_MOUSE = 5,
         }
         public enum EWindowsType
         {
