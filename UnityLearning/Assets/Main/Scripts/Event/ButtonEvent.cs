@@ -20,13 +20,19 @@ namespace TEN.EVENTS
             {
                 case "LoadScene":
                     return () => { LoadingScene(pIn_Prameter); };
+                case "Back":
+                    return () => { OnBackClick(); };
                 default:
                     return () => { Debug.Log("Click me!shuang!"); };
             }
         }
         public void LoadingScene(string pIn_SceneName)
         {
-            MSceneManager.Instance.LoadScene(pIn_SceneName);
+            MSceneManager.Instance.OnLoadSceneClick(pIn_SceneName);
+        }
+        public void OnBackClick()
+        {
+            MSceneManager.Instance.Back();
         }
 	}
 }

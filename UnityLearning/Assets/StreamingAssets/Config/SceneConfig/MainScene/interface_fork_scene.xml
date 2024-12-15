@@ -6,7 +6,7 @@
       <Type>0</Type>
       <Name>Canvas000</Name>
       <Layout>1</Layout>
-      <Image path="Image/MainScene/mei001" />
+      <Image path="Image/MainScene/robin001" />
     </Interface>
 
     <!-- Background Section -->
@@ -17,24 +17,14 @@
     <!-- Button Array Section -->
     <ButtonArray>
         <Button>
-          <Name>复刻星穹铁道</Name>
+          <Name>ForkBack</Name>
           <Type>1</Type>
           <Image path="images/button1.png" />
-          <Anchor x = "0.5" y ="0.5"/>
+          <Anchor x = "0" y ="1"/>
           <Layout>0</Layout>
-          <Position x="0" y="100" />
+          <Position x="150" y="-75" />
           <Size width="300" height="150" />
-          <Event name="LoadScene" parameter="Fork" />
-        </Button>
-        <Button>
-          <Name>个人练习</Name>
-          <Type>1</Type>
-          <Image path="images/button2.png" />
-          <Anchor x = "0.5" y ="0.5"/>
-          <Layout>0</Layout>
-          <Position x="0" y="-100" />
-          <Size width="300" height="150" />
-          <Event name="LoadScene" parameter="IndividualExercises" />
+          <Event name="Back" parameter="" />
         </Button>
     </ButtonArray>
 </InterfaceConfig>

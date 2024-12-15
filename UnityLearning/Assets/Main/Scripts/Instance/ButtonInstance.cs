@@ -13,7 +13,7 @@ namespace TEN.INSTANCE
     ///创建者：Michael Corleone
     ///类用途：按钮实例类，相当与对Button的封装
     /// </summary>
-    public class ButtonInstance : MonoBehaviour , TEN.INTERFACE.InterfaceInit
+    public class ButtonInstance : MonoBehaviour , TEN.INTERFACE.IInit , INTERFACE.IReset
     {
         private TMPro.TextMeshProUGUI _text;
         private Button _button;
@@ -22,18 +22,21 @@ namespace TEN.INSTANCE
 
         public void Init(SInterface vIn_InitData)
         {
-            SButtonData sButtonData = vIn_InitData as SButtonData;
             _text = transform.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             _button = transform.GetComponent<Button>();
             _image = transform.GetComponent<Image>();
             _rectTransform = _button.GetComponent<RectTransform>();
 
+            Reset(vIn_InitData);
+        }
+
+        public void Reset(SInterface vIn_InitData)
+        {
+            _button.onClick.RemoveAllListeners();
+            SButtonData sButtonData = vIn_InitData as SButtonData;
             _text.text = sButtonData.Name;
-            _rectTransform.anchorMin = sButtonData.Achor;
-            _rectTransform.anchorMax = sButtonData.Achor;
-            _rectTransform.sizeDelta = sButtonData.Size;
-            _rectTransform.anchoredPosition = sButtonData.Pos;
-            _button.onClick.AddListener(TEN.EVENTS.ButtonEvent.Instance.GetEvent(sButtonData.EventName , sButtonData.EventParameter));
+            GLOBAL.Global.GameobjectOpreate.SetRectTransform(_rectTransform, sButtonData.SBaseData);
+            _button.onClick.AddListener(TEN.EVENTS.ButtonEvent.Instance.GetEvent(sButtonData.EventName, sButtonData.EventParameter));
         }
 
         private void Awake()

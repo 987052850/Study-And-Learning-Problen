@@ -1,12 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Xml;
 
 namespace TEN.GLOBAL
 {
     public static class Path
     {
-        public const string MainSceneConfig = @"\Config\SceneConfig\MainScene\interface_main_scene.xml";
+        //添加新场景修改内容 3/4
+        public static class XMLCongigPath
+        {
+            public const string MainSceneConfig = @"\Config\SceneConfig\MainScene\interface_main_scene.xml";
+            public const string ForkSceneConfig = @"\Config\SceneConfig\MainScene\interface_fork_scene.xml";
+            public const string SelfPracticeSceneConfig = @"\Config\SceneConfig\MainScene\interface_self_practice_scene.xml";
+            public const string RoundedCornerSceneConfig = @"\Config\SceneConfig\MainScene\interface_rounded_corner_scene.xml";
+            public const string GPUInstancingSceneConfig = @"\Config\SceneConfig\MainScene\interface_GPU_instancing_scene.xml";
+        }
     }
     public static class Global
     {
@@ -36,6 +45,33 @@ namespace TEN.GLOBAL
                     return false;
                 }
             }
+            public static bool ConvertString(out bool pIn_Receive, string vIn_Value)
+            {
+                if (bool.TryParse(vIn_Value, out pIn_Receive))
+                {
+                    return true;
+                }
+                else
+                {
+                    Debug.Log($"Convert Error {vIn_Value}");
+                    return false;
+                }
+            }
+
+            public static bool ConvertInt2Enum<T>(out T pIn_Enum , int vIn_Value)
+                where T : System.Enum
+            {
+                if (System.Enum.IsDefined(typeof(T), vIn_Value))
+                {
+                    pIn_Enum = (T)(object)vIn_Value;
+                    return true;
+                }
+                else
+                {
+                    pIn_Enum = default;
+                    return false;
+                }
+            }
         }
         public static class BitManager
         {
@@ -51,14 +87,179 @@ namespace TEN.GLOBAL
             {
                 return (value & (1 << position)) != 0 ? 1 : 0;
             }
+            public static void SetBitByBool(ref int pIn_Value, bool vIn_Result, int vIn_Position)
+            {
+                if (vIn_Result)
+                {
+                    SetBitToZero(ref pIn_Value, vIn_Position);
+                }
+                else
+                {
+                    SetBitToOne(ref pIn_Value, vIn_Position);
+                }
+            }
+        }
+        public static class GameobjectOpreate
+        {
+            public static void SetRectTransform(RectTransform pIn_RT , STRUCT.SBaseData vIn_BaseData)
+            {
+                pIn_RT.anchorMin = vIn_BaseData.Achor;
+                pIn_RT.anchorMax = vIn_BaseData.Achor;
+                pIn_RT.sizeDelta = vIn_BaseData.Size;
+                pIn_RT.anchoredPosition = vIn_BaseData.Pos;
+            }
+        }
+        public static class ParsingXMLAgreementData
+        {
+            private static string GetX(ENUM.EXMLAgreement vIn_Agreement)
+            {
+                switch (vIn_Agreement)
+                {
+                    case ENUM.EXMLAgreement.xyzw:
+                        return "x";
+                    case ENUM.EXMLAgreement.XYZW:
+                        return "X";
+                    case ENUM.EXMLAgreement.wh:
+                        return "width";
+                    case ENUM.EXMLAgreement.WH:
+                        return "Width";
+                    case ENUM.EXMLAgreement.rgba:
+                        return "r";
+                    case ENUM.EXMLAgreement.RGBA:
+                        return "R";
+                    default:
+                        return "x";
+                }
+            }
+            private static string GetY(ENUM.EXMLAgreement vIn_Agreement)
+            {
+                switch (vIn_Agreement)
+                {
+                    case ENUM.EXMLAgreement.xyzw:
+                        return "y";
+                    case ENUM.EXMLAgreement.XYZW:
+                        return "Y";
+                    case ENUM.EXMLAgreement.wh:
+                        return "height";
+                    case ENUM.EXMLAgreement.WH:
+                        return "Height";
+                    case ENUM.EXMLAgreement.rgba:
+                        return "g";
+                    case ENUM.EXMLAgreement.RGBA:
+                        return "G";
+                    default:
+                        return "y";
+                }
+            }
+            private static string GetZ(ENUM.EXMLAgreement vIn_Agreement)
+            {
+                switch (vIn_Agreement)
+                {
+                    case ENUM.EXMLAgreement.xyzw:
+                        return "z";
+                    case ENUM.EXMLAgreement.XYZW:
+                        return "Z";
+                    case ENUM.EXMLAgreement.rgba:
+                        return "b";
+                    case ENUM.EXMLAgreement.RGBA:
+                        return "B";
+                    default:
+                        return "z";
+                }
+            }
+            private static string GetW(ENUM.EXMLAgreement vIn_Agreement)
+            {
+                switch (vIn_Agreement)
+                {
+                    case ENUM.EXMLAgreement.xyzw:
+                        return "w";
+                    case ENUM.EXMLAgreement.XYZW:
+                        return "w";
+                    case ENUM.EXMLAgreement.rgba:
+                        return "a";
+                    case ENUM.EXMLAgreement.RGBA:
+                        return "A";
+                    default:
+                        return "w";
+                }
+            }
+            public static void Parsing(ref int pIn_Temp, ref int pIn_TempPos, XmlNode contetnNode, out Vector2 pIn_Result , ENUM.EXMLAgreement vIn_Agreement)
+            {
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.x, contetnNode.Attributes[GetX(vIn_Agreement)].Value), ++pIn_TempPos);
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.y, contetnNode.Attributes[GetY(vIn_Agreement)].Value), ++pIn_TempPos);
+            }
+            public static void Parsing(ref int pIn_Temp, ref int pIn_TempPos, XmlNode contetnNode, out Vector3 pIn_Result, ENUM.EXMLAgreement vIn_Agreement)
+            {
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.x, contetnNode.Attributes[GetX(vIn_Agreement)].Value), ++pIn_TempPos);
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.y, contetnNode.Attributes[GetY(vIn_Agreement)].Value), ++pIn_TempPos);
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.z, contetnNode.Attributes[GetZ(vIn_Agreement)].Value), ++pIn_TempPos);
+            }
+            public static void Parsing(ref int pIn_Temp, ref int pIn_TempPos, XmlNode contetnNode, out Vector4 pIn_Result, ENUM.EXMLAgreement vIn_Agreement)
+            {
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.x, contetnNode.Attributes[GetX(vIn_Agreement)].Value), ++pIn_TempPos);
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.y, contetnNode.Attributes[GetY(vIn_Agreement)].Value), ++pIn_TempPos);
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.z, contetnNode.Attributes[GetZ(vIn_Agreement)].Value), ++pIn_TempPos);
+                BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out pIn_Result.w, contetnNode.Attributes[GetW(vIn_Agreement)].Value), ++pIn_TempPos);
+            }
+            public static void Parsing(ref int pIn_Temp, ref int pIn_TempPos, XmlNode contetnNode, out Color pIn_Result, ENUM.EXMLAgreement vIn_Agreement)
+            {
+                Vector4 result = Vector4.zero;
+                Parsing(ref pIn_Temp, ref pIn_TempPos, contetnNode, out result, vIn_Agreement);
+                pIn_Result = result;
+            }
+            public static void Parsing<T>(ref int pIn_Temp, ref int pIn_TempPos, XmlNode contetnNode, out T pIn_Result, string vIn_Agreement = "Type")
+                where T : System.Enum
+            {
+                TEN.GLOBAL.Global.BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertString(out int type, contetnNode[vIn_Agreement].InnerText), ++pIn_TempPos);
+                if (TEN.GLOBAL.Global.BitManager.GetBit(pIn_Temp, pIn_TempPos) == 0)
+                {
+                    TEN.GLOBAL.Global.BitManager.SetBitByBool(ref pIn_Temp, Convert.ConvertInt2Enum(out pIn_Result, type), ++pIn_TempPos);
+                }
+                else
+                {
+                    pIn_Result = default;
+                }
+            }
         }
     }
     namespace ENUM
     {
-        public enum EUIType
+        //添加新场景修改内容 1/4
+        public enum EScene
+        {
+            MAIN_SCENE = 0,
+            FORK_SCENE = 1,
+            PRACTICE_SCENE = 2,
+            ROUNDED_CORNER = 3,
+            GPU_INSTANCING = 4,
+        }
+        public enum EWindowsType
         {
             CANVAS = 0,
+            BUTTON = 1,
+            IMAGE = 2,
+            INFINITE_SCROLLING = 3,//无限滚动窗口
+            SLIDER = 4,
+            TEXT_MESH_PRO = 5,
 
+        }
+        public enum ESliderMapType
+        {
+            SHADER = 0,
+            SHADER_IMAGE = 1,
+
+        }
+        public enum EXMLAgreement
+        {
+            //小写xyzw
+            xyzw,
+            XYZW,
+            //小写width、height
+            wh,
+            WH,
+            //小写rgba
+            rgba,
+            RGBA,
         }
     }
     namespace STRUCT
@@ -73,38 +274,120 @@ namespace TEN.GLOBAL
             public Transform Parent;
             public string Name;
             public int Layout;
-            public string ImagePath;
+            public string BackroundImagePath;
+            public ENUM.EWindowsType WindowType;
+            public SBaseData SBaseData;
 
             public virtual void Log()
             {
-                Debug.Log($"Name : {Name} , Layout : {Layout}");
+                Debug.Log($"Name : {Name} , Layout : {Layout} WindowType:{WindowType}");
             }
             public virtual void Reset()
             {
                 Parent = null;
                 Name = "";
                 Layout = 0;
+                SBaseData.Reset();
+            }
+        }
 
+        public struct SBaseData
+        {
+            public Vector2 Achor;
+            public Vector2 Pos;
+            public Vector2 Size;
+
+            public void Reset()
+            {
+                Achor = Vector2.zero;
+                Pos = Vector2.zero;
+                Size = Vector2.zero;
             }
         }
 
         public class SButtonData : SInterface
         {
-            public Vector2 Achor;
-            public Vector2 Pos;
-            public Vector2 Size;
             public string EventName;
             public string EventParameter;
             public override void Reset()
             {
                 base.Reset();
-                Achor = Vector2.zero;
-                Pos = Vector2.zero;
-                Size = Vector2.zero;
+                
             }
             public override void Log()
             {
-                Debug.Log($"Name : {Name} , Layout : {Layout} , Achor : {Achor} , Pos : {Pos} , Size : {Size} , ImagePath : {ImagePath} , EventName : {EventName} , EventParameter : {EventParameter}");
+                Debug.Log($"Name : {Name} , Layout : {Layout} , Achor : {SBaseData.Achor} , Pos : {SBaseData.Pos} , Size : {SBaseData.Size} , ImagePath : {BackroundImagePath} , EventName : {EventName} , EventParameter : {EventParameter}");
+            }
+        }
+
+        public class SSliderData : SInterface
+        {
+            public ENUM.ESliderMapType MapType;
+            public string ObjectName;
+            public string AttributeName;
+            public Vector2 MapRange;
+            public override void Reset()
+            {
+                base.Reset();
+                MapType = ENUM.ESliderMapType.SHADER;
+                ObjectName = "";
+                AttributeName = "";
+                MapRange = Vector2.zero;
+            }
+            public override void Log()
+            {
+                Debug.Log($"Name : {Name} , Layout : {Layout} , Achor : {SBaseData.Achor} , Pos : {SBaseData.Pos} , Size : {SBaseData.Size} , ImagePath : {BackroundImagePath} , MapType : {MapType} , ObjectName : {ObjectName} , AttributeName : {AttributeName} , MapRange : {MapRange}");
+            }
+        }
+
+        public class SScrollViewData : SInterface
+        {
+            public Vector2 ContentSize;
+            public List<SInterface> ContentData = new List<SInterface>();
+            public bool Horizontal;
+            public bool Vertical;
+            public ENUM.EWindowsType ChildWindowType;
+            public override void Reset()
+            {
+                base.Reset();
+                ContentData.Clear();
+            }
+            public override void Log()
+            {
+                
+            }
+        }
+
+        public class SImageData : SInterface
+        {
+            public Color Color;
+            //public UnityEngine.UI.Image.Type Sprite;
+
+            public override void Reset()
+            {
+                base.Reset();
+            }
+            public override void Log()
+            {
+                Debug.Log($"Name : {Name} , Layout : {Layout} , Achor : {SBaseData.Achor} , Pos : {SBaseData.Pos} , Size : {SBaseData.Size} , ImagePath : {BackroundImagePath} , Color : {Color}");
+            }
+        }
+        public class STextMeshProData : SInterface
+        {
+            public Color Color;
+            public bool AutoSize;
+            public int MinSize;
+            public int MaxSize;
+            public string Text;
+            //public UnityEngine.UI.Image.Type Sprite;
+
+            public override void Reset()
+            {
+                base.Reset();
+            }
+            public override void Log()
+            {
+                Debug.Log($"Name : {Name} , Layout : {Layout} , Achor : {SBaseData.Achor} , Pos : {SBaseData.Pos} , Size : {SBaseData.Size} , ImagePath : {BackroundImagePath} , Color : {Color} , Text{Text}");
             }
         }
     }
