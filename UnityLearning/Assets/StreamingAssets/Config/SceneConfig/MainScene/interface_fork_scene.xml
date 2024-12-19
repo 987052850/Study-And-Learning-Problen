@@ -26,5 +26,16 @@
           <Size width="300" height="150" />
           <Event name="Back" parameter="" />
         </Button>
+
+      <Button>
+        <Name>枘凿六合</Name>
+        <Type>1</Type>
+        <Image path="images/button1.png" />
+        <Anchor x = "0.5" y ="0.5"/>
+        <Layout>0</Layout>
+        <Position x="0" y="-100" />
+        <Size width="300" height="150" />
+        <Event name="LoadScene" parameter="RubiksCube" />
+      </Button>
     </ButtonArray>
 </InterfaceConfig>

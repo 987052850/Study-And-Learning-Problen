@@ -42,6 +42,7 @@ namespace TEN.MANAGER
                 { "RoundedCorner" , EScene.ROUNDED_CORNER},
                 { "GPUInstancing" , EScene.GPU_INSTANCING},
                 { "TransparentFollowMouse" , EScene.TRANSPARENT_FOLLOW_MOUSE},
+                { "RubiksCube" , EScene.FORK_RUBIKS_CUBE},
             };
         
             _sceneMapToPath = new Dictionary<EScene, string>()
@@ -52,7 +53,8 @@ namespace TEN.MANAGER
                 { EScene.ROUNDED_CORNER , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.RoundedCornerSceneConfig},
                 { EScene.GPU_INSTANCING , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.GPUInstancingSceneConfig},
                 { EScene.TRANSPARENT_FOLLOW_MOUSE , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.TransparentFollowMouseSceneConfig},
-            };
+                { EScene.FORK_RUBIKS_CUBE , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.RubiksCubeSceneConfig},
+           };
             //Scene[] scenes = SceneManager.GetAllScenes();
             //_allScenesName = new string[scenes.Length];
             //for (int i = 0; i < scenes.Length; i++)

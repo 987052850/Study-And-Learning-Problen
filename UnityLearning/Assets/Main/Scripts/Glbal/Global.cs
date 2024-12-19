@@ -16,6 +16,7 @@ namespace TEN.GLOBAL
             public const string RoundedCornerSceneConfig = @"\Config\SceneConfig\MainScene\interface_rounded_corner_scene.xml";
             public const string GPUInstancingSceneConfig = @"\Config\SceneConfig\MainScene\interface_GPU_instancing_scene.xml";
             public const string TransparentFollowMouseSceneConfig = @"\Config\SceneConfig\MainScene\interface_Transparent_Follow_Mouse_scene.xml";
+            public const string RubiksCubeSceneConfig = @"\Config\SceneConfig\MainScene\interface_rubiks_cube_scene.xml";
         }
     }
     public static class Global
@@ -222,6 +223,36 @@ namespace TEN.GLOBAL
                 }
             }
         }
+
+        public static class MVector3
+        {
+            //return a <= b
+            public static bool Less(Vector3 a, Vector3 b , float e = 0.01f)
+            {
+                if ((a.x - b.x)>e)
+                {
+                    return false;
+                }
+                else if ((a.y - b.y) > e )
+                {
+                    return false;
+                }
+                else if ((a.z - b.z) > e )
+                {
+                    return false;
+                }
+                return true;
+            }
+
+            public static Vector3 Quantize(Vector3 v, float step = 0.01f)
+            {
+                return new Vector3(
+                    Mathf.Round(v.x / step) * step,
+                    Mathf.Round(v.y / step) * step,
+                    Mathf.Round(v.z / step) * step
+                );
+            }
+        }
     }
     namespace ENUM
     {
@@ -234,6 +265,7 @@ namespace TEN.GLOBAL
             ROUNDED_CORNER = 3,
             GPU_INSTANCING = 4,
             TRANSPARENT_FOLLOW_MOUSE = 5,
+            FORK_RUBIKS_CUBE = 6,//枘凿六合
         }
         public enum EWindowsType
         {
@@ -262,6 +294,15 @@ namespace TEN.GLOBAL
             //小写rgba
             rgba,
             RGBA,
+        }
+        public enum ERubiksCubeInstanceState
+        {
+            //不透明状态
+            NORMAL,
+            //透明状态，用于表示被选中的状态
+            TRANSPARENT_A,
+            //透明状态，用于表示未被选中的状态
+            TRANSPARENT_B
         }
     }
     namespace STRUCT
