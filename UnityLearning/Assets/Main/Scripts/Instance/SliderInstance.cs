@@ -51,12 +51,21 @@ namespace TEN
                 case GLOBAL.ENUM.ESliderMapType.SHADER:
                     {
                         _targetGameobject = GameObject.Find(_sliderData.ObjectName);
-                        Debug.Log($"{_targetGameobject == null}");
                         _targetMaterial = _targetGameobject.GetComponent<MeshRenderer>().sharedMaterial;
                         _slider.onValueChanged.AddListener((float vIn_SliderValue) =>
                         {
                             float mapValue = ValueMap(vIn_SliderValue);
                             _targetMaterial.SetFloat(_sliderData.AttributeName, mapValue);
+                        });
+                    }
+                    break;
+                case GLOBAL.ENUM.ESliderMapType.GAMEOBJECT_POSITION_X:
+                    {
+                        _targetGameobject = GameObject.Find(_sliderData.ObjectName);
+                        _slider.onValueChanged.AddListener((float vIn_SliderValue) =>
+                        {
+                            float mapValue = ValueMap(vIn_SliderValue);
+                            _targetGameobject.transform.position = new Vector3(mapValue , _targetGameobject.transform.position.y, _targetGameobject.transform.position.z);
                         });
                     }
                     break;

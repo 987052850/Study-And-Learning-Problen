@@ -17,6 +17,7 @@ namespace TEN.GLOBAL
             public const string GPUInstancingSceneConfig = @"\Config\SceneConfig\MainScene\interface_GPU_instancing_scene.xml";
             public const string TransparentFollowMouseSceneConfig = @"\Config\SceneConfig\MainScene\interface_Transparent_Follow_Mouse_scene.xml";
             public const string RubiksCubeSceneConfig = @"\Config\SceneConfig\MainScene\interface_rubiks_cube_scene.xml";
+            public const string StencilTestSceneConfig = @"\Config\SceneConfig\MainScene\interface_stencil_test_scene.xml";
         }
     }
     public static class Global
@@ -266,6 +267,7 @@ namespace TEN.GLOBAL
             GPU_INSTANCING = 4,
             TRANSPARENT_FOLLOW_MOUSE = 5,
             FORK_RUBIKS_CUBE = 6,//枘凿六合
+            STENCIL_TEST = 7,
         }
         public enum EWindowsType
         {
@@ -281,7 +283,7 @@ namespace TEN.GLOBAL
         {
             SHADER = 0,
             SHADER_IMAGE = 1,
-
+            GAMEOBJECT_POSITION_X = 2,
         }
         public enum EXMLAgreement
         {
@@ -304,10 +306,53 @@ namespace TEN.GLOBAL
             //透明状态，用于表示未被选中的状态
             TRANSPARENT_B
         }
+        public enum ERubiksCubeInstanceLocation
+        {
+            FLU,
+            FRU,
+            FLD,
+            FRD,
+            BLU,
+            BRU,
+            BLD,
+            BRD
+        }
+        [System.Flags]
+        public enum BlockProjectedShapes
+        {
+            None = 0,
+            LeftUpperTriangle = 1 << 0,
+            MiddleUpperTriangle = 1 << 1,
+            RightUpperTriangle = 1 << 2,
+            LeftLowerTriangle = 1 << 3,
+            MiddleLowerTriangle = 1 << 4,
+            RightLowerTriangle = 1 << 5,
+            Walkable = LeftUpperTriangle | MiddleUpperTriangle,
+            FullHexagon = LeftUpperTriangle | MiddleUpperTriangle | RightUpperTriangle | LeftLowerTriangle | MiddleLowerTriangle | RightLowerTriangle,
+        }
+        public enum BlockCategory
+        {
+            BeforeMirror,
+            InMirror,
+            BehindMirror,
+        }
     }
     namespace STRUCT
     {
         //大爷的，C#为毛不能结构体继承
+
+        public struct GameobjectMessage
+        {
+            public Vector3 Location;
+            public Quaternion Attitude;
+            public Vector3 Scale;
+            public GameobjectMessage(Vector3 vIn_Location , Quaternion vIn_Attitude , Vector3 vIn_Scale)
+            {
+                Location = vIn_Location;
+                Attitude = vIn_Attitude;
+                Scale = vIn_Scale;
+            }
+        }
 
         /// <summary>
         /// 界面属性

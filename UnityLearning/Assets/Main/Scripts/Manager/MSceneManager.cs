@@ -43,6 +43,7 @@ namespace TEN.MANAGER
                 { "GPUInstancing" , EScene.GPU_INSTANCING},
                 { "TransparentFollowMouse" , EScene.TRANSPARENT_FOLLOW_MOUSE},
                 { "RubiksCube" , EScene.FORK_RUBIKS_CUBE},
+                { "StencilTest" , EScene.STENCIL_TEST},
             };
         
             _sceneMapToPath = new Dictionary<EScene, string>()
@@ -54,6 +55,7 @@ namespace TEN.MANAGER
                 { EScene.GPU_INSTANCING , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.GPUInstancingSceneConfig},
                 { EScene.TRANSPARENT_FOLLOW_MOUSE , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.TransparentFollowMouseSceneConfig},
                 { EScene.FORK_RUBIKS_CUBE , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.RubiksCubeSceneConfig},
+                { EScene.STENCIL_TEST , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.StencilTestSceneConfig},
            };
             //Scene[] scenes = SceneManager.GetAllScenes();
             //_allScenesName = new string[scenes.Length];

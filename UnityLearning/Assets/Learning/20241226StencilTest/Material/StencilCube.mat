@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Foreground
-  m_Shader: {fileID: 4800000, guid: 99fb175ee4358ea4095b094f267aa70f, type: 3}
+  m_Name: StencilCube
+  m_Shader: {fileID: 4800000, guid: 4e4754fd1db65434180130668386fe8d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8643ce097eeb9a84dbcc205d1cc03d3f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3dde184f9803fe44c839bdddd8c63017, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -65,6 +65,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _Gloss: 35
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -72,14 +73,15 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Range: 0.39373866
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _StencilComp: 5
+    - _StencilRef: 2
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MousePos: {r: 0.11706732, g: 0.89807695, b: 0, a: 0}
+    - _Specular: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

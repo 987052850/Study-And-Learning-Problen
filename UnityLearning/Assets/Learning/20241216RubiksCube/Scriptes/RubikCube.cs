@@ -5,22 +5,25 @@ using TEN.GLOBAL;
 using UnityEngine.UI;
 using static TEN.GLOBAL.Global.MVector3;
 using TEN.GLOBAL.ENUM;
+using System;
 
-namespace TEN.LEARNING
+namespace TEN.LEARNING.RUBIKCUBE
 {
 	/// <summary>
 	///项目 : TEN
 	///日期：2024/12/16 19:02:58 
 	///创建者：Michael Corleone
-	///类用途：
+	///类用途：管理魔方
 	/// </summary>
 	public class RubikCube : MonoBehaviour
 	{
+        public event Action OnComplete;
+        private delegate void OnRotateComplete(float pIn_Direction);
+
         private GameObject _flu;
         private GameObject _fru;
         private GameObject _fld;
         private GameObject _frd;
-
         private GameObject _blu;
         private GameObject _bru;
         private GameObject _bld;
@@ -65,6 +68,7 @@ namespace TEN.LEARNING
         List<GameObject> _allCubeData = new List<GameObject>();
         private MANAGER.AlignManger _alignManger1;
         private MANAGER.AlignManger _alignManger2;
+        private Dictionary<ERubiksCubeInstanceLocation , TEN.GLOBAL.STRUCT.GameobjectMessage> _startPos;
 
         private void Awake()
         {
@@ -90,18 +94,30 @@ namespace TEN.LEARNING
 
             _buttonsMonitor = new MANAGER.ButtonsMonitor();
 
-            _upFaceGameobjects      = new GameObject[4];
-            _downFaceGameobjects    = new GameObject[4];
+            _upFaceGameobjects = new GameObject[4];
+            _downFaceGameobjects = new GameObject[4];
             _forwardFaceGameobjects = new GameObject[4];
             _backFaceGameobjects = new GameObject[4];
             _rightFaceGameobjects = new GameObject[4];
             _leftFaceGameobjects = new GameObject[4];
 
-            _chooseFace   = null;
+            _chooseFace = null;
             _unChooseFace = null;
 
             UpdateAllFace();
             UpdateShaderState();
+            OnComplete += EVENTS.RubiksCubeEvent.Instance.OnComplete;
+            _startPos = new Dictionary<ERubiksCubeInstanceLocation, GLOBAL.STRUCT.GameobjectMessage>
+            {
+                { ERubiksCubeInstanceLocation.FLU, new GLOBAL.STRUCT.GameobjectMessage(_flu.transform.position ,_flu.transform.rotation , _flu.transform.lossyScale)},
+                { ERubiksCubeInstanceLocation.FRU, new GLOBAL.STRUCT.GameobjectMessage(_fru.transform.position ,_fru.transform.rotation , _fru.transform.lossyScale)},
+                { ERubiksCubeInstanceLocation.FLD, new GLOBAL.STRUCT.GameobjectMessage(_fld.transform.position ,_fld.transform.rotation , _fld.transform.lossyScale)},
+                { ERubiksCubeInstanceLocation.FRD, new GLOBAL.STRUCT.GameobjectMessage(_frd.transform.position ,_frd.transform.rotation , _frd.transform.lossyScale)},
+                { ERubiksCubeInstanceLocation.BLU, new GLOBAL.STRUCT.GameobjectMessage(_blu.transform.position ,_blu.transform.rotation , _blu.transform.lossyScale)},
+                { ERubiksCubeInstanceLocation.BRU, new GLOBAL.STRUCT.GameobjectMessage(_bru.transform.position ,_bru.transform.rotation , _bru.transform.lossyScale)},
+                { ERubiksCubeInstanceLocation.BLD, new GLOBAL.STRUCT.GameobjectMessage(_bld.transform.position ,_bld.transform.rotation , _bld.transform.lossyScale)},
+                { ERubiksCubeInstanceLocation.BRD, new GLOBAL.STRUCT.GameobjectMessage(_brd.transform.position ,_brd.transform.rotation , _brd.transform.lossyScale)},
+            };
         }
         private void UpdateShaderState()
         {
@@ -386,24 +402,15 @@ namespace TEN.LEARNING
         {
             _curTime = 0;
             float velocity = vIn_Degree / _rotateTime;
-            List<Vector3> tempList = new List<Vector3>();
-            foreach (var item in _chooseFace)
-            {
-                tempList.Add(item.transform.position);
-            }
             while (_curTime < _rotateTime)
             {
                 _chooseRotateManager.Rotate(velocity * Time.deltaTime);
                 _curTime += Time.deltaTime;
                 yield return null;
             }
-            //for (int i = 0; i < _chooseFace.Length - 2; i++)
-            //{
-            //    _chooseFace[i].transform.position = tempList[i + 1];
-            //}
-            //_chooseFace[_chooseFace.Length - 1].transform.position = tempList[0];
             UpdateAllFace();
             _animationRunning = false;
+            ResetLocation();
             Detected();
         }
         private void Log(GameObject[] pIn_GameObjects , string pIn_Tag = "")
@@ -420,9 +427,29 @@ namespace TEN.LEARNING
                 if (_alignManger2.Detected())
                 {
                     //TODO Complete
-                    Debug.Log("complete !!!");
+                    OnComplete?.Invoke();
                 }
             }
+        }
+        private void ResetLocation()
+        {
+            _flu.transform.position = _startPos[ERubiksCubeInstanceLocation.FLU].Location;
+            _fru.transform.position = _startPos[ERubiksCubeInstanceLocation.FRU].Location;
+            _fld.transform.position = _startPos[ERubiksCubeInstanceLocation.FLD].Location;
+            _frd.transform.position = _startPos[ERubiksCubeInstanceLocation.FRD].Location;
+            _blu.transform.position = _startPos[ERubiksCubeInstanceLocation.BLU].Location;
+            _bru.transform.position = _startPos[ERubiksCubeInstanceLocation.BRU].Location;
+            _bld.transform.position = _startPos[ERubiksCubeInstanceLocation.BLD].Location;
+            _brd.transform.position = _startPos[ERubiksCubeInstanceLocation.BRD].Location;
+
+            //_flu.transform.rotation = _startPos[ERubiksCubeInstanceLocation.FLU].Attitude;
+            //_fru.transform.rotation = _startPos[ERubiksCubeInstanceLocation.FRU].Attitude;
+            //_fld.transform.rotation = _startPos[ERubiksCubeInstanceLocation.FLD].Attitude;
+            //_frd.transform.rotation = _startPos[ERubiksCubeInstanceLocation.FRD].Attitude;
+            //_blu.transform.rotation = _startPos[ERubiksCubeInstanceLocation.BLU].Attitude;
+            //_bru.transform.rotation = _startPos[ERubiksCubeInstanceLocation.BRU].Attitude;
+            //_bld.transform.rotation = _startPos[ERubiksCubeInstanceLocation.BLD].Attitude;
+            //_brd.transform.rotation = _startPos[ERubiksCubeInstanceLocation.BRD].Attitude;
         }
     }
 }

@@ -95,6 +95,18 @@ namespace TEN.MANAGER
                     }
                 }
 
+                // 遍历所有 UI 渲染器
+                foreach (CanvasRenderer canvasRenderer in FindObjectsOfType<CanvasRenderer>())
+                {
+                    if (canvasRenderer.gameObject.activeInHierarchy)
+                    {
+                        // CanvasRenderer 没有直接暴露顶点和三角形信息。
+                        // 如果需要统计其数据，需调用 Canvas 动态生成的批次信息。
+                        //totalVertices += canvasRenderer.GetMaterial().ma; // 粗略的顶点计数方式
+                        drawCalls += canvasRenderer.materialCount; // 一个 CanvasRenderer 对应一个 UI 批次。
+                    }
+                }
+
                 UpdateFrameRate?.Invoke(_frameRate, string.Format($"FPS: {(int)(1 / Time.deltaTime)}"));
                 UpdateDrawCall?.Invoke(_drawCall , string.Format($"Draw Calls: {drawCalls}"));
                 UpdateTotalVertices?.Invoke(_totalVertices, string.Format($"Vertices: {totalVertices}"));
