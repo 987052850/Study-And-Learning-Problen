@@ -44,6 +44,7 @@ namespace TEN.MANAGER
                 { "TransparentFollowMouse" , EScene.TRANSPARENT_FOLLOW_MOUSE},
                 { "RubiksCube" , EScene.FORK_RUBIKS_CUBE},
                 { "StencilTest" , EScene.STENCIL_TEST},
+                { "DreamTicker" , EScene.DREAM_TICKER},
             };
         
             _sceneMapToPath = new Dictionary<EScene, string>()
@@ -56,7 +57,8 @@ namespace TEN.MANAGER
                 { EScene.TRANSPARENT_FOLLOW_MOUSE , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.TransparentFollowMouseSceneConfig},
                 { EScene.FORK_RUBIKS_CUBE , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.RubiksCubeSceneConfig},
                 { EScene.STENCIL_TEST , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.StencilTestSceneConfig},
-           };
+                { EScene.DREAM_TICKER , Application.streamingAssetsPath + TEN.GLOBAL.Path.XMLCongigPath.DreamTickerSceneConfig},
+            };
             //Scene[] scenes = SceneManager.GetAllScenes();
             //_allScenesName = new string[scenes.Length];
             //for (int i = 0; i < scenes.Length; i++)

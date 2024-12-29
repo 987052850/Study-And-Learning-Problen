@@ -43,10 +43,12 @@ namespace TEN.LEARNING.DREAMTICKER
         public void RebuildBlockGraph()
         {
             AllBlocksInWorld.Clear();
+            //获取所有子对象
             Block[] beforeMirrorBlocks = BeforeMirror.GetComponentsInChildren<Block>();
             Block[] inMirrorBlocks = InMirror.GetComponentsInChildren<Block>();
             Block[] behindMirrorBlocks = BehindMirror.GetComponentsInChildren<Block>();
 
+            //摄像机的变换矩阵的逆矩阵，用于将世界坐标系下的位置等信息转换到摄像机坐标系下
             Matrix4x4 viewMat = Camera.main.worldToCameraMatrix;
             Vector2 axisX = viewMat.MultiplyVector(Vector3.right);
             Vector2 axisZ = viewMat.MultiplyVector(Vector3.forward);
@@ -102,6 +104,7 @@ namespace TEN.LEARNING.DREAMTICKER
             CullBlocksByMirror(lineVMaxB, lineHMaxB: lineHMaxB, inMirrorBlocks, BlockCategory.InMirror);
             CullBlocksByMirror(lineVMaxB, lineHMaxB: lineHMaxB, behindMirrorBlocks, BlockCategory.BehindMirror);
             CullBlocksByViewSpaceZ(bMap);
+            ConnectBlocks(bMap);
 
             OnBlockGraphRebuilt.Invoke();
         }
@@ -118,6 +121,7 @@ namespace TEN.LEARNING.DREAMTICKER
                 }
                 else if (cat == BlockCategory.InMirror)
                 {
+                    Debug.Log($"<color=red>IsInMirror name {mapBlock.gameObject.name} </color>");
                     if (IsInMirror(mapBlock.ProjectedXY + new Vector2(1 / 6f, 1 / 6f), lineVMaxB, lineHMaxB))
                     {
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.MiddleUpperTriangle;
@@ -150,46 +154,54 @@ namespace TEN.LEARNING.DREAMTICKER
                 }
                 else
                 {
+                    Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} </color>");
                     if (!IsInMirror(mapBlock.ProjectedXY + new Vector2(1 / 6f, 1 / 6f), lineVMaxB, lineHMaxB))
                     {
+                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} MiddleUpperTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.MiddleUpperTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY - new Vector2(1 / 6f, 1 / 6f), lineVMaxB, lineHMaxB))
                     {
+                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} LeftUpperTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.LeftUpperTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY - new Vector2(1 / 6f - 1, 1 / 6f), lineVMaxB, lineHMaxB))
                     {
+                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} RightUpperTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.RightUpperTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY + new Vector2(1 / 6f, 1 / 6f - 1), lineVMaxB, lineHMaxB))
                     {
+                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} LeftLowerTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.LeftLowerTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY + new Vector2(1 / 6f + 1, 1 / 6f - 1), lineVMaxB, lineHMaxB))
                     {
+                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} RightLowerTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.RightLowerTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY - new Vector2(1 / 6f - 1, 1 / 6f + 1), lineVMaxB, lineHMaxB))
                     {
+                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} MiddleLowerTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.MiddleLowerTriangle;
                     }
+
+                    //mapBlock.ProjectedShapes = BlockProjectedShapes.FullHexagon;
                 }
             }
         }
         private bool IsInMirror(Vector2 point, int lineVMaxB, float lineHMaxB)
         {
             float lineHMinB = lineHMaxB - Mirror.Height;
-            if (point.x < lineHMinB || point.y > lineHMaxB)
+            if (point.y < lineHMinB || point.y > lineHMaxB)
             {
                 return false;
             }
-
             int lineVMinB = lineVMaxB - Mirror.Width;
             float pos1 = -point.x - point.y + lineVMinB;
             float pos2 = -point.x - point.y + lineVMaxB;
@@ -197,7 +209,54 @@ namespace TEN.LEARNING.DREAMTICKER
         }
         private void CullBlocksByViewSpaceZ(Dictionary<Vector2Int, BlockGroup> bMap)
         {
+            Dictionary<Vector2Int, float> zMapLower = new Dictionary<Vector2Int, float>();
+            Dictionary<Vector2Int, float> zMapUpper = new Dictionary<Vector2Int, float>();
 
+            foreach (var block in bMap.Values.SelectMany(g => g))
+            {
+                if ((block.ProjectedShapes & BlockProjectedShapes.LeftUpperTriangle) != 0)
+                {
+                    SetZMap(zMapLower, block.ProjectedXY, block.ViewSpaceUpperCenterZ);
+                }
+
+                if ((block.ProjectedShapes & BlockProjectedShapes.MiddleUpperTriangle) != 0)
+                {
+                    SetZMap(zMapUpper, block.ProjectedXY, block.ViewSpaceUpperCenterZ);
+                }
+
+                if ((block.ProjectedShapes & BlockProjectedShapes.RightUpperTriangle) != 0)
+                {
+                    SetZMap(zMapLower, block.ProjectedXY + new Vector2Int(1, 0), block.ViewSpaceUpperCenterZ);
+                }
+
+                if ((block.ProjectedShapes & BlockProjectedShapes.LeftLowerTriangle) != 0)
+                {
+                    SetZMap(zMapUpper, block.ProjectedXY + new Vector2Int(0, -1), block.ViewSpaceUpperCenterZ);
+                }
+
+                if ((block.ProjectedShapes & BlockProjectedShapes.MiddleLowerTriangle) != 0)
+                {
+                    SetZMap(zMapLower, block.ProjectedXY + new Vector2Int(1, -1), block.ViewSpaceUpperCenterZ);
+                }
+
+                if ((block.ProjectedShapes & BlockProjectedShapes.RightLowerTriangle) != 0)
+                {
+                    SetZMap(zMapUpper, block.ProjectedXY + new Vector2Int(1, -1), block.ViewSpaceUpperCenterZ);
+                }
+            }
+
+            foreach (var block in bMap.Values.SelectMany(g => g))
+            {
+                if ((block.ProjectedShapes & BlockProjectedShapes.LeftUpperTriangle) != 0 && block.ViewSpaceUpperCenterZ < zMapLower[block.ProjectedXY])
+                {
+                    block.ProjectedShapes &= ~BlockProjectedShapes.LeftUpperTriangle;
+                }
+
+                if ((block.ProjectedShapes & BlockProjectedShapes.MiddleUpperTriangle) != 0 && block.ViewSpaceUpperCenterZ < zMapUpper[block.ProjectedXY])
+                {
+                    block.ProjectedShapes &= ~BlockProjectedShapes.MiddleUpperTriangle;
+                }
+            }
         }
 
         private static void SetZMap(Dictionary<Vector2Int, float> zMap, Vector2Int key, float z)
@@ -214,7 +273,40 @@ namespace TEN.LEARNING.DREAMTICKER
 
         private void ConnectBlocks(Dictionary<Vector2Int, BlockGroup> bMap)
         {
+            foreach (var kvp in bMap)
+            {
+                kvp.Value.ClearAdjBlocks();
+                if (!kvp.Value.IsWalkable)
+                {
+                    continue;
+                }
 
+                BlockGroup adjBlocks;
+
+                // 右
+                if (bMap.TryGetValue(kvp.Key + Vector2Int.right, out adjBlocks) && adjBlocks.IsWalkable)
+                {
+                    kvp.Value.AddAdjBlocks(adjBlocks);
+                }
+
+                // 左
+                if (bMap.TryGetValue(kvp.Key + Vector2Int.left, out adjBlocks) && adjBlocks.IsWalkable)
+                {
+                    kvp.Value.AddAdjBlocks(adjBlocks);
+                }
+
+                // 前
+                if (bMap.TryGetValue(kvp.Key + Vector2Int.up, out adjBlocks) && adjBlocks.IsWalkable)
+                {
+                    kvp.Value.AddAdjBlocks(adjBlocks);
+                }
+
+                // 后
+                if (bMap.TryGetValue(kvp.Key + Vector2Int.down, out adjBlocks) && adjBlocks.IsWalkable)
+                {
+                    kvp.Value.AddAdjBlocks(adjBlocks);
+                }
+            }
         }
     }
 }

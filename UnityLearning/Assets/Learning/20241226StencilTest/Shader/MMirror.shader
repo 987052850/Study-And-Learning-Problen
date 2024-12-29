@@ -20,8 +20,9 @@ Shader "Learning/HW/StencilLearning/Mirror"
 				Pass Replace
 			}
 			ColorMask 0
-			Zwrite off
+			ZWrite off
 		}
+
 
 		Pass
 		{

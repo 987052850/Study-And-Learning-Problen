@@ -65,7 +65,7 @@ namespace TEN.LEARNING.DREAMTICKER
             {
                 return;
             }
-            Vector3 pos = Plane.transform.position;
+            Vector3 pos = Plane.transform.localPosition;
             pos.x = Mathf.Clamp(Mathf.RoundToInt(pos.x + 0.5f) - 0.5f, Plane.MoveMinX, Plane.MoveMaxX);
             Plane.transform.localPosition = pos;
 

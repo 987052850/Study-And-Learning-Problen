@@ -18,6 +18,8 @@ namespace TEN.GLOBAL
             public const string TransparentFollowMouseSceneConfig = @"\Config\SceneConfig\MainScene\interface_Transparent_Follow_Mouse_scene.xml";
             public const string RubiksCubeSceneConfig = @"\Config\SceneConfig\MainScene\interface_rubiks_cube_scene.xml";
             public const string StencilTestSceneConfig = @"\Config\SceneConfig\MainScene\interface_stencil_test_scene.xml";
+            public const string DreamTickerSceneConfig = @"\Config\SceneConfig\MainScene\interface_dream_ticker_scene.xml";
+            
         }
     }
     public static class Global
@@ -268,6 +270,7 @@ namespace TEN.GLOBAL
             TRANSPARENT_FOLLOW_MOUSE = 5,
             FORK_RUBIKS_CUBE = 6,//Ëƒ‘‰¡˘∫œ
             STENCIL_TEST = 7,
+            DREAM_TICKER = 8,
         }
         public enum EWindowsType
         {
