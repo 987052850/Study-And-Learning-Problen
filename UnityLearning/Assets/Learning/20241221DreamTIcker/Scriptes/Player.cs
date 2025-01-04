@@ -42,7 +42,6 @@ namespace TEN.LEARNING.DREAMTICKER
 
         public void TryMove()
         {
-            Debug.Log("00001");
             if (_isMoving || _moveGoalIndex >= GoalBlocks.Length)
             {
                 return;
@@ -55,7 +54,6 @@ namespace TEN.LEARNING.DREAMTICKER
             bool ok = false;
             Block goal = GoalBlocks[_moveGoalIndex];
             _moveQueue.Enqueue(goal);
-            Debug.Log("00002");
             while (_moveQueue.TryDequeue(out Block top))
             {
                 _moveVis.Add(top);
@@ -65,7 +63,6 @@ namespace TEN.LEARNING.DREAMTICKER
                     ok = true;
                     break;
                 }
-                Debug.Log($"00003{top.AdjBlocks.Count}");
                 foreach (var adj in top.AdjBlocks)
                 {
                     if (!_moveVis.Contains(adj))
@@ -75,7 +72,6 @@ namespace TEN.LEARNING.DREAMTICKER
                     }
                 }
             }
-            Debug.Log($"00003 {ok}");
             if (ok)
             {
                 _moveGoalIndex++;

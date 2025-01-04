@@ -53,7 +53,6 @@ namespace TEN.LEARNING.DREAMTICKER
             Vector2 axisX = viewMat.MultiplyVector(Vector3.right);
             Vector2 axisZ = viewMat.MultiplyVector(Vector3.forward);
             Vector2 origin = viewMat.MultiplyPoint(beforeMirrorBlocks[0].UpperCenter);
-            Debug.Log($"Origin Block {beforeMirrorBlocks[0].transform.position.RoundToInt()}", beforeMirrorBlocks[0]);
 
             /*
              |a b|   的逆矩阵为      |d -b| * 1/det
@@ -68,10 +67,14 @@ namespace TEN.LEARNING.DREAMTICKER
                 Vector4.zero
                 );
 
+            //创建自定义坐标系下的点->block图之间地映射
             Dictionary<Vector2Int, BlockGroup> bMap = new Dictionary<Vector2Int, BlockGroup>();
 
+            int ii = 0;
+            int jj = 0;
             foreach (var mapBlock in beforeMirrorBlocks.Concat(inMirrorBlocks).Concat(behindMirrorBlocks))
             {
+                ii++;
                 //坐标转换
                 Vector3 vp = viewMat.MultiplyPoint(mapBlock.UpperCenter);
                 Vector2 p = transientMat * ((Vector2)vp - origin);
@@ -84,8 +87,13 @@ namespace TEN.LEARNING.DREAMTICKER
 
                 if (!bMap.TryGetValue(key , out BlockGroup group))
                 {
+                    GLOBAL.Global.MDebug.Log($"create map {++jj} , {ii}");
                     group = new BlockGroup();
                     bMap[key] = group;
+                }
+                else
+                {
+                    GLOBAL.Global.MDebug.Log($"{mapBlock.gameObject.name}",MColor.YELLOW);
                 }
 
                 mapBlock.ProjectedXY = key;
@@ -97,8 +105,6 @@ namespace TEN.LEARNING.DREAMTICKER
             planeMaxPoint = transientMat * (planeMaxPoint - origin);
             int lineVMaxB = Mathf.RoundToInt(planeMaxPoint.x + planeMaxPoint.y);
             float lineHMaxB = Mathf.RoundToInt(planeMaxPoint.y + 0.5f) - 0.5f;
-            Debug.Log($"VMax: {lineVMaxB}");
-            Debug.Log($"HMax: {lineHMaxB}");
 
             CullBlocksByMirror(lineVMaxB, lineHMaxB: lineHMaxB, beforeMirrorBlocks, BlockCategory.BeforeMirror);
             CullBlocksByMirror(lineVMaxB, lineHMaxB: lineHMaxB, inMirrorBlocks, BlockCategory.InMirror);
@@ -121,7 +127,6 @@ namespace TEN.LEARNING.DREAMTICKER
                 }
                 else if (cat == BlockCategory.InMirror)
                 {
-                    Debug.Log($"<color=red>IsInMirror name {mapBlock.gameObject.name} </color>");
                     if (IsInMirror(mapBlock.ProjectedXY + new Vector2(1 / 6f, 1 / 6f), lineVMaxB, lineHMaxB))
                     {
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.MiddleUpperTriangle;
@@ -154,40 +159,33 @@ namespace TEN.LEARNING.DREAMTICKER
                 }
                 else
                 {
-                    Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} </color>");
                     if (!IsInMirror(mapBlock.ProjectedXY + new Vector2(1 / 6f, 1 / 6f), lineVMaxB, lineHMaxB))
                     {
-                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} MiddleUpperTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.MiddleUpperTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY - new Vector2(1 / 6f, 1 / 6f), lineVMaxB, lineHMaxB))
                     {
-                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} LeftUpperTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.LeftUpperTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY - new Vector2(1 / 6f - 1, 1 / 6f), lineVMaxB, lineHMaxB))
                     {
-                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} RightUpperTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.RightUpperTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY + new Vector2(1 / 6f, 1 / 6f - 1), lineVMaxB, lineHMaxB))
                     {
-                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} LeftLowerTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.LeftLowerTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY + new Vector2(1 / 6f + 1, 1 / 6f - 1), lineVMaxB, lineHMaxB))
                     {
-                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} RightLowerTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.RightLowerTriangle;
                     }
 
                     if (!IsInMirror(mapBlock.ProjectedXY - new Vector2(1 / 6f - 1, 1 / 6f + 1), lineVMaxB, lineHMaxB))
                     {
-                        Debug.Log($"<color=red>IsInMirror BehindMirror name {mapBlock.gameObject.name} MiddleLowerTriangle </color>");
                         mapBlock.ProjectedShapes |= BlockProjectedShapes.MiddleLowerTriangle;
                     }
 

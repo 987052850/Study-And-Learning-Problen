@@ -81,6 +81,7 @@ namespace TEN.LEARNING.DREAMTICKER
 
         private void OnMouseExit() => _onMouseExit.Invoke(this);
 
+
         private void OnDrawGizmos()
         {
             Color color = Gizmos.color;

@@ -19,7 +19,8 @@ namespace TEN.GLOBAL
             public const string RubiksCubeSceneConfig = @"\Config\SceneConfig\MainScene\interface_rubiks_cube_scene.xml";
             public const string StencilTestSceneConfig = @"\Config\SceneConfig\MainScene\interface_stencil_test_scene.xml";
             public const string DreamTickerSceneConfig = @"\Config\SceneConfig\MainScene\interface_dream_ticker_scene.xml";
-            
+            public const string WayFindingSceneConfig = @"\Config\SceneConfig\MainScene\interface_find_way_scene.xml";
+
         }
     }
     public static class Global
@@ -256,6 +257,21 @@ namespace TEN.GLOBAL
                 );
             }
         }
+
+        public static class MDebug
+        {
+            public static readonly Dictionary<ENUM.MColor, string> Color2String = new Dictionary<ENUM.MColor, string>()
+            {
+                { ENUM.MColor.BLUE , "blue"},
+                { ENUM.MColor.RED , "red"},
+                { ENUM.MColor.YELLOW , "yellow"},
+            };
+            public static string key = "TENLog";
+            public static void Log(string s, ENUM.MColor color = ENUM.MColor.RED)
+            {
+                Debug.Log($"<color={Color2String[color]}>{key}    {s} </color>");
+            }
+        }
     }
     namespace ENUM
     {
@@ -271,6 +287,7 @@ namespace TEN.GLOBAL
             FORK_RUBIKS_CUBE = 6,//Ëƒ‘‰¡˘∫œ
             STENCIL_TEST = 7,
             DREAM_TICKER = 8,
+            WAY_FINDING = 9,
         }
         public enum EWindowsType
         {
@@ -338,6 +355,12 @@ namespace TEN.GLOBAL
             BeforeMirror,
             InMirror,
             BehindMirror,
+        }
+        public enum MColor
+        {
+            RED,
+            BLUE,
+            YELLOW
         }
     }
     namespace STRUCT
