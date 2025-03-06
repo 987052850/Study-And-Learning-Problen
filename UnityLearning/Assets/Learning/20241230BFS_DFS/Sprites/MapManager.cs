@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TEN.GLOBAL;
 using UnityEngine.Pool;
+using TEN.DATASTRUCTURE;
 
 namespace TEN.LEARNING.ALGORITHM
 {
@@ -31,9 +32,37 @@ namespace TEN.LEARNING.ALGORITHM
         private bool dfs_complete = false;
         private int _tryMaxCount = 5;
         private int _tryCount = 0;
+        private BinaryPile<Block> _openList = new BinaryPile<Block>(true);
 
         private void Awake()
         {
+            BinaryPile<int> aa = new BinaryPile<int>(true);
+            aa.Push(-10);
+            aa.Pop();
+            for (int i = 0; i < 4; i++)
+            {
+                aa.Push(Random.Range(0, 100));
+            }
+            aa.Pop();
+            for (int i = 0; i < 4; i++)
+            {
+                aa.Push(Random.Range(0, 100));
+            }
+            aa.Pop();
+            for (int i = 0; i < 4; i++)
+            {
+                aa.Push(Random.Range(0, 100));
+            }
+            aa.Pop();
+            for (int i = 0; i < 4; i++)
+            {
+                aa.Push(Random.Range(0, 100));
+            }
+            int count = aa.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Debug.Log(aa.Pop());
+            }
             InitMap();
             ResetPath();
         }
@@ -249,6 +278,145 @@ namespace TEN.LEARNING.ALGORITHM
             //两种情况可以走到这里。1、当前block不存在邻居。2、当前block的所有邻居都不是起点。
             pIn_Path.Pop().gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
         }
+        private IEnumerator AAlgorithm()
+        {
+            //AS寻路入口
+            if (_interaction)
+            {
+                yield break;
+            }
+            _interaction = true;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).GetComponent<MeshRenderer>().material.color = Color.black;
+                transform.GetChild(i).GetComponent<Block>().InitText();
+            }
+            _openList.Clear();
+            Dictionary<Block, Block> path = DictionaryPool<Block, Block>.Get();
+            HashSet<Block> closeList = HashSetPool<Block>.Get();
+            _openList.Push(_terminal);
+            closeList.Add(_terminal);
+            _terminal.G = 0;
+            _terminal.H = _terminal.GetEuclideanDis(_begining);
+            _terminal.F = _terminal.G + _terminal.H;
+            _terminal.RestText();
+            bool complete = false;
+            while (_openList.Count > 0 && !complete)
+            {
+                yield return new WaitForSeconds(0.2f);
+                Block block = _openList.Pop();
+
+                foreach (var item in block.Neighbors)
+                {
+                    if (!closeList.Contains(item))
+                    {
+                        item.G = 0;
+                        item.H = item.GetEuclideanDis(_begining);
+                        item.F = item.G + item.H;
+
+                        _openList.Push(item);
+                        closeList.Add(item);
+                        path.Add(item, block);
+
+                        item.RestText();
+
+                        if (item == _begining)
+                        {
+                            complete = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            while (_curBlock != _terminal)
+            {
+                yield return StartCoroutine(WaitInteraction());
+                Global.MDebug.Log($"{_curBlock.name}");
+                Block block = path[_curBlock];
+                //TODO 移动效果
+                _player.transform.position = block.transform.position + Vector3.up;
+                yield return new WaitForSeconds(0.5f);
+                block.gameObject.GetComponent<MeshRenderer>().material.color = Color.white;
+                _curBlock = block;
+            }
+            ResetPath();
+            _goToGoal = false;
+            _interaction = false;
+            DictionaryPool<Block, Block>.Release(path);
+            HashSetPool<Block>.Release(closeList);
+
+
+
+
+            ////AS寻路入口
+            //if (_interaction)
+            //{
+            //    yield break;
+            //}
+            //_interaction = true;
+
+            ////好像存在路径中断的情况，且将修改全部颜色的函数放置此处
+            //for (int i = 0; i < transform.childCount; i++)
+            //{
+            //    transform.GetChild(i).GetComponent<MeshRenderer>().material.color = Color.black;
+            //}
+
+            //HashSet<Block> visitedNeighbor = HashSetPool<Block>.Get();
+            ////需要访问的对象
+            //Block nextStep;
+            ////路径
+            //Stack<Block> path = new Stack<Block>();
+            ////从终点开始查找，方便
+            //nextStep = _terminal;
+            //path.Push(_terminal);
+            //while (nextStep != null)
+            //{
+            //    //单路径时死循环
+            //    //path.Push(block);
+            //    yield return new WaitForSeconds(0.2f);
+            //    Block minDisBlock = nextStep.GetMinDisBlockToGoal(_begining, visitedNeighbor);
+            //    if (minDisBlock != null)
+            //    {
+            //        //路径可能断掉
+            //        //path.Push(minDisBlock);
+            //        path.Push(nextStep);
+            //        nextStep.gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
+            //        nextStep = minDisBlock;
+            //        if (minDisBlock == _begining)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (path.TryPop(out Block temp))
+            //        {
+            //            nextStep = temp;
+            //            temp.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            //        }
+            //    }
+            //}
+
+
+            //while (_curBlock != _terminal)
+            //{
+            //    yield return StartCoroutine(WaitInteraction());
+            //    Global.MDebug.Log($"{_curBlock.name}");
+            //    Block block = path.Pop();
+            //    //TODO 移动效果
+            //    _player.transform.position = block.transform.position + Vector3.up;
+            //    yield return new WaitForSeconds(0.5f);
+            //    block.gameObject.GetComponent<MeshRenderer>().material.color = Color.white;
+            //    _curBlock = block;
+            //}
+            ////移动结束，DFS寻路完成
+
+            //ResetPath();
+            //_goToGoal = false;
+            //_interaction = false;
+            //HashSetPool<Block>.Release(visitedNeighbor);
+        }
+
         private IEnumerator AStar()
         {
             //AS寻路入口
@@ -257,73 +425,75 @@ namespace TEN.LEARNING.ALGORITHM
                 yield break;
             }
             _interaction = true;
-
-            //好像存在路径中断的情况，且将修改全部颜色的函数放置此处
             for (int i = 0; i < transform.childCount; i++)
             {
                 transform.GetChild(i).GetComponent<MeshRenderer>().material.color = Color.black;
+                transform.GetChild(i).GetComponent<Block>().InitText();
             }
-
-            HashSet<Block> visitedNeighbor = HashSetPool<Block>.Get();
-            //需要访问的对象
-            Block nextStep;
-            //路径
-            Stack<Block> path = new Stack<Block>();
-            //从终点开始查找，方便
-            nextStep = _terminal;
-            path.Push(_terminal);
-            while (nextStep != null)
+            _openList.Clear();
+            Dictionary<Block, Block> path = DictionaryPool<Block,Block>.Get();
+            HashSet<Block> closeList = HashSetPool<Block>.Get();
+            _openList.Push(_terminal);
+            closeList.Add(_terminal);
+            _terminal.G = 0;
+            _terminal.H = _terminal.GetEuclideanDis(_begining);
+            _terminal.F = _terminal.G + _terminal.H;
+            _terminal.RestText();
+            bool complete = false;
+            while (_openList.Count > 0 && !complete)
             {
-                //单路径时死循环
-                //path.Push(block);
                 yield return new WaitForSeconds(0.2f);
-                Block minDisBlock = nextStep.GetMinDisBlockToGoal(_begining, visitedNeighbor);
-                if (minDisBlock != null)
+                Block block = _openList.Pop();
+
+                foreach (var item in block.Neighbors)
                 {
-                    //路径可能断掉
-                    //path.Push(minDisBlock);
-                    path.Push(nextStep);
-                    nextStep.gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
-                    nextStep = minDisBlock;
-                    if (minDisBlock == _begining)
+                    if (!closeList.Contains(item))
                     {
-                        break;
-                    }
-                }
-                else
-                {
-                    if (path.TryPop(out Block temp))
-                    {
-                        nextStep = temp;
-                        temp.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                        item.G = item.GetEuclideanDis(_terminal);
+                        item.H = item.GetEuclideanDis(_begining);
+                        item.F = item.G + item.H;
+
+                        _openList.Push(item);
+                        closeList.Add(item);
+                        path.Add(item, block);
+
+                        item.RestText();
+
+                        if (item == _begining)
+                        {
+                            complete = true;
+                            break;
+                        }
                     }
                 }
             }
-
-
             while (_curBlock != _terminal)
             {
                 yield return StartCoroutine(WaitInteraction());
                 Global.MDebug.Log($"{_curBlock.name}");
-                Block block = path.Pop();
+                Block block = path[_curBlock];
                 //TODO 移动效果
                 _player.transform.position = block.transform.position + Vector3.up;
                 yield return new WaitForSeconds(0.5f);
                 block.gameObject.GetComponent<MeshRenderer>().material.color = Color.white;
                 _curBlock = block;
             }
-            //移动结束，DFS寻路完成
-
             ResetPath();
             _goToGoal = false;
             _interaction = false;
-            HashSetPool<Block>.Release(visitedNeighbor);
+            DictionaryPool<Block, Block>.Release(path);
+            HashSetPool<Block>.Release(closeList);
         }
 
         public void OnASGoToGoalClick()
         {
             _goToGoal = true;
             StartCoroutine(AStar());
+        }
+        public void OnAGoToGoalClick()
+        {
+            _goToGoal = true;
+            StartCoroutine(AAlgorithm());
         }
         public void OnDFSGoToGoalClick()
         {

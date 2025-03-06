@@ -112,5 +112,7 @@ namespace TEN.LEARNING.DREAMTICKER
 
             Gizmos.color = color;
         }
+
+
     }
 }
