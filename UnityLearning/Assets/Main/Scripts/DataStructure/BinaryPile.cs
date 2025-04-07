@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace TEN.DATASTRUCTURE
 {
-	/// <summary>
-	///项目 : TEN
-	///日期：2025/1/6 21:54:20 
-	///创建者：Michael Corleone
-	///类用途：
-	/// </summary>
-	public class BinaryPile<T>
+    /// <summary>
+    ///项目 : TEN
+    ///日期：2025/1/6 21:54:20 
+    ///创建者：Michael Corleone
+    ///类用途：二叉堆
+    /// </summary>
+    public class BinaryPile<T>
         where T : IComparable
 	{
         private Dictionary<int, T> _allNodes = new Dictionary<int, T>();

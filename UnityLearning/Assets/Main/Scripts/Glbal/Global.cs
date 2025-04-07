@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
+using System.ComponentModel;
+using System;
 
 namespace TEN.GLOBAL
 {
@@ -77,6 +79,13 @@ namespace TEN.GLOBAL
                     pIn_Enum = default;
                     return false;
                 }
+            }
+
+            public static string ConvertEnum2String(Enum value)
+            {
+                var field = value.GetType().GetField(value.ToString());
+                var attribute = (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
+                return attribute?.Description ?? value.ToString();
             }
         }
         public static class BitManager

@@ -2,6 +2,9 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
+/// <summary>
+/// 注：代码正确的运行需要设置C#脚本的模板
+/// </summary>
 public class CustomScriptGenerator : UnityEditor.AssetModificationProcessor
 {
     const string Author = "Michael Corleone";
@@ -9,8 +12,9 @@ public class CustomScriptGenerator : UnityEditor.AssetModificationProcessor
     {
         // 检查是否是 C# 脚本
         path = path.Replace(".meta", "");
-        if (path.EndsWith(".cs"))
+        if (path.EndsWith(".cs") && File.Exists(path))
         {
+
             string fullPath = Path.GetFullPath(path);
             string content = File.ReadAllText(fullPath);
 
